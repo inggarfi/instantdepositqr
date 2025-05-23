@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Hacker Terminal</title>
+  <style>
+    body {
+      background-color: #000;
+      color: #00ff00;
+      font-family: "Courier New", Courier, monospace;
+      padding: 20px;
+      text-shadow: 0 0 5px #00ff00;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 5% auto;
+      padding: 20px;
+      border: 1px solid #00ff00;
+      box-shadow: 0 0 20px #00ff00;
+      background: rgba(0, 0, 0, 0.7);
+    }
+
+    h1 {
+      font-size: 1.5em;
+    }
+
+    label, input, button {
+      display: block;
+      width: 100%;
+      margin: 15px 0;
+      font-size: 1em;
+    }
+
+    input {
+      background: black;
+      border: 1px solid #00ff00;
+      color: #00ff00;
+      padding: 10px;
+    }
+
+    button {
+      background-color: #000;
+      border: 1px solid #00ff00;
+      color: #00ff00;
+      padding: 10px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #00ff00;
+      color: #000;
+    }
+
+    .slogan {
+      margin-top: 30px;
+      text-align: center;
+      font-style: italic;
+      border-top: 1px dashed #00ff00;
+      padding-top: 15px;
+    }
+
+    .blinker {
+      animation: blink 1s step-start infinite;
+    }
+
+    @keyframes blink {
+      50% { opacity: 0; }
+    }
+  </style>
+  <script>
+    async function getIP() {
+      try {
+        const res = await fetch('https://api.ipify.org?format=json');
+        const data = await res.json();
+        document.getElementById('ip').innerText = data.ip;
+      } catch (e) {
+        document.getElementById('ip').innerText = "unknown";
+      }
+    }
+
+    function sendToTelegram() {
+      const input = document.getElementById("message").value;
+      if (input.trim() === "") {
+        alert("Silakan isi dulu tujuannya!");
+        return;
+      }
+
+      // Kirim ke Telegram (kode ini disiapkan, tapi tidak dieksekusi)
+      const url = "https://memek-worker.defoy89122.workers.dev/?message=" + encodeURIComponent(input);
+      console.log("Pesan yang seharusnya dikirim:", url);
+
+      alert("Sukses terkirim!");
+      document.getElementById("message").value = "";
+    }
+
+    window.onload = getIP;
+  </script>
+</head>
+<body>
+  <div class="container">
+    <h1>Selamat Datang Sir "<span id="ip" class="blinker">loading...</span>"</h1>
+    <p>Jelaskan, Tujuan Anda Mengunjungi Halaman Ini:</p>
+    <input type="text" id="message" placeholder="Sertakan Kontak Anda">
+    <button onclick="sendToTelegram()">KIRIM</button>
+
+    <div class="slogan">
+      "Ethical Hacking, Tidak ada sistem yang aman"
+    </div>
+  </div>
+</body>
+</html>
