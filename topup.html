@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Deposit Cepat</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: sans-serif;
+      background: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRd_4oJp1K-cYlKIAC4VnqCJ8U0VtzuAijYpAkHL1QMu_hxMydHjlLUmP0&s=10') no-repeat center center fixed;
+      background-size: cover;
+    }
+    .overlay {
+      backdrop-filter: blur(6px);
+      background-color: rgba(255, 255, 255, 0.8);
+      min-height: 100vh;
+      padding: 20px;
+    }
+    h1, h2 {
+      text-align: center;
+      color: #333;
+    }
+    .options {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      max-width: 500px;
+      margin: auto;
+    }
+    .option {
+      background: white;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    .option img {
+      max-width: 100%;
+      border: 2px solid #ccc;
+      border-radius: 10px;
+    }
+    input[type="number"] {
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      margin-top: 10px;
+    }
+    button {
+      margin-top: 10px;
+      padding: 10px;
+      width: 100%;
+      background: #28a745;
+      color: white;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    .help-btn {
+      background: #007bff;
+      margin-top: 30px;
+    }
+    .note {
+      font-size: 14px;
+      color: #555;
+      text-align: center;
+      margin-top: 10px;
+    }
+    .hidden {
+      display: none;
+    }
+    select {
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      margin-bottom: 20px;
+    }
+    .bottom-img {
+      display: block;
+      margin: 40px auto 0;
+      max-width: 200px;
+    }
+  </style>
+</head>
+<body>
+  <div class="overlay">
+    <h1>Deposit Cepat</h1>
+    <h2>Pilih Tujuan Deposit</h2>
+
+    <div class="options">
+      <select id="depositMethod">
+        <option value="">-- Pilih Metode --</option>
+        <option value="qrisBank">QRIS All Bank</option>
+        <option value="dana">E-Wallet Dana</option>
+        <option value="qrisEwallet">QRIS All E-Wallet</option>
+      </select>
+
+      <div id="qrisBank" class="option hidden">
+        <img src="https://imagizer.imageshack.com/v2/320xq70/r/922/uOeZAn.jpg" alt="QRIS Bank">
+        <input id="inputBank" type="number" placeholder="Masukkan nominal" />
+        <button onclick="confirmDeposit('inputBank')">Konfirmasi</button>
+        <div class="note">
+          Scan > Isi Nominal > Transfer > Konfirmasi<br>
+          Minimal Deposit 50K (Lima Puluh Ribu Rupiah)
+        </div>
+      </div>
+
+      <div id="dana" class="option hidden">
+        <p>088214538915 a.n Surwati (E-Wallet Dana)</p>
+        <img src="https://i.postimg.cc/fRLcfGs3/IMG-20250604-081202-737.jpg" alt="Dana QRIS">
+        <input id="inputDana" type="number" placeholder="Masukkan nominal" />
+        <button onclick="confirmDeposit('inputDana')">Konfirmasi</button>
+        <div class="note">
+          Scan > Isi Nominal > Transfer > Konfirmasi<br>
+          Minimal Deposit 50K (Lima Puluh Ribu Rupiah)
+        </div>
+      </div>
+
+      <div id="qrisEwallet" class="option hidden">
+        <img src="https://imagizer.imageshack.com/v2/320xq70/r/922/uOeZAn.jpg" alt="QRIS Ewallet">
+        <input id="inputEwallet" type="number" placeholder="Masukkan nominal" />
+        <button onclick="confirmDeposit('inputEwallet')">Konfirmasi</button>
+        <div class="note">
+          Scan > Isi Nominal > Transfer > Konfirmasi<br>
+          Minimal Deposit 50K (Lima Puluh Ribu Rupiah)
+        </div>
+      </div>
+
+      <button class="help-btn" onclick="window.open('https://direct.lc.chat/19188360/', '_blank')">BANTUAN DEPOSIT</button>
+    </div>
+
+    <img class="bottom-img" src="https://gtyfup2m.112400c1199c.com/poster-QRIS.jpg" alt="Bottom Image">
+  </div>
+
+  <!-- Live Chat Widget -->
+  <script>
+    (function() {
+      var lc = document.createElement('script'); lc.type = 'text/javascript'; lc.async = true;
+      lc.src = 'https://cdn.livechatinc.com/tracking.js';
+      lc.onload = function() {
+        window.__lc = window.__lc || {};
+        window.__lc.license = 19188360;
+        window.__lc.chat_between_groups = false;
+      };
+      document.head.appendChild(lc);
+    })();
+  </script>
+
+  <script>
+    const methodSelect = document.getElementById('depositMethod');
+    const sections = ['qrisBank', 'dana', 'qrisEwallet'];
+
+    methodSelect.addEventListener('change', function () {
+      sections.forEach(id => {
+        document.getElementById(id).classList.add('hidden');
+      });
+      const selected = this.value;
+      if (selected) {
+        document.getElementById(selected).classList.remove('hidden');
+      }
+    });
+
+    function confirmDeposit(inputId) {
+      const input = document.getElementById(inputId);
+      const rawValue = input.value.replace(/\D/g, '');
+      const nominal = parseInt(rawValue);
+      if (nominal >= 50000) {
+        alert('Deposit Berhasil');
+        window.location.href = 'https://alexsis138main.fun/m/';
+      } else {
+        alert('Minimal deposit 50 ribu');
+      }
+    }
+  </script>
+</body>
+</html>
