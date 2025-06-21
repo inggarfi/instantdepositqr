@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Formulir Deposit</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: monospace;
+    }
+    body {
+      background-color: #cc9a06;
+      color: #000;
+      padding: 10px;
+    }
+    .header {
+      text-align: center;
+      background: black;
+      color: white;
+      padding: 10px;
+      font-size: 24px;
+    }
+    .marquee {
+      background: gold;
+      color: black;
+      font-weight: bold;
+      padding: 5px;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+    .menu {
+      display: flex;
+      justify-content: space-around;
+      background: #333;
+      padding: 10px;
+      margin-top: 10px;
+    }
+    .menu div {
+      text-align: center;
+      flex: 1;
+      color: white;
+      font-size: 14px;
+    }
+    .menu img {
+      height: 50px;
+      margin-bottom: 5px;
+    }
+    #infoDana {
+      background: white;
+      padding: 10px;
+      text-align: center;
+      font-weight: bold;
+      margin-top: 10px;
+      display: none;
+    }
+    .input-section {
+      text-align: center;
+      margin-top: 10px;
+    }
+    .amount-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 5px;
+      margin-top: 10px;
+    }
+    .amount-buttons button {
+      padding: 10px;
+      background: #00aaff;
+      border: none;
+      color: white;
+      font-weight: bold;
+      width: 70px;
+    }
+    #submitBtn, .adminBtn, .doneBtn {
+      background: #007bff;
+      color: white;
+      padding: 10px;
+      margin-top: 10px;
+      width: 100%;
+      font-weight: bold;
+    }
+    .hidden { display: none; }
+    #invoice {
+      display: none;
+      background: white;
+      padding: 10px;
+      margin-top: 10px;
+      font-size: 14px;
+    }
+    .qr {
+      text-align: center;
+      margin: 10px 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">FORMULIR DEPOSIT</div>
+  <marquee class="marquee">Pilih Menu Deposit Yang Diinginkan, Scan Qris, Isi Nominal, Transfer Dan Klik Telah Membayar. Deposit Wajib Menggunakan Kode Unik 818</marquee>
+
+  <div class="menu">
+    <div onclick="selectMenu('bank')"><img src="https://i.ibb.co/2Z4XY8c/qris-bank.png"><br>QRIS BANK</div>
+    <div onclick="selectMenu('instan')"><img src="https://i.ibb.co/8xdnYQ3/qris-instan.png"><br>QRIS INSTANT</div>
+    <div onclick="selectMenu('dana')"><img src="https://i.ibb.co/FbDmnSz/dana.png"><br>DANA</div>
+    <div onclick="selectMenu('ewallet')"><img src="https://i.ibb.co/FKzsnMB/ewallet.png"><br>QRIS EWALLET</div>
+  </div>
+
+  <div id="infoDana">DANA - 088214538915 - SURWATI</div>
+
+  <div id="formSection">
+    <div class="input-section">
+      <p>Jumlah Deposit</p>
+      <input id="nominal" type="text" inputmode="numeric" placeholder="Contoh: 50.000">
+      <div class="amount-buttons">
+        <button onclick="addAmount(50000)">50K</button>
+        <button onclick="addAmount(100000)">100K</button>
+        <button onclick="addAmount(200000)">200K</button>
+        <button onclick="addAmount(500000)">500K</button>
+        <button onclick="addAmount(750000)">750K</button>
+        <button onclick="addAmount(1000000)">1.000K</button>
+        <button onclick="addAmount(1250000)">1.250K</button>
+        <button onclick="addAmount(1500000)">1.500K</button>
+        <button onclick="addAmount(2000000)">2.000K</button>
+      </div>
+      <button id="submitBtn" onclick="submitForm()">KIRIM</button>
+      <button class="adminBtn" onclick="location.href='https://direct.lc.chat/19188360/'">Hubungi Admin</button>
+    </div>
+  </div>
+
+  <div id="invoice">
+    <h2 style="text-align:center; color:#007bff;">Invoice</h2>
+    <p><strong>NO. INVOICE:</strong> <span id="invId"></span></p>
+    <p><strong>TGL.:</strong> <span id="invDate"></span></p>
+    <p><strong>BATAS PEMBAYARAN:</strong> <span id="invExp"></span></p>
+    <p><strong>STATUS:</strong> <span id="invStatus" style="color:red; font-weight:bold">UNPAID</span></p>
+    <p><strong>KETERANGAN:</strong> TopUp <span id="invTopup"></span></p>
+    <p><strong>JUMLAH:</strong> IDR <span id="invJumlah"></span></p>
+    <p><strong>BIAYA LAYANAN:</strong> IDR 0,00</p>
+    <p><strong>TOTAL BAYAR:</strong> IDR <span id="invJumlah"></span></p>
+    <p><strong>PILIHAN PEMBAYARAN:</strong><br><img src="https://gtyfup2m.112400c1199c.com/logo-qris.png" width="150"><br><em>(QRIS Payment)</em></p>
+    <div class="qr">
+      <p>Pindai untuk membayar</p>
+      <img src="https://imagizer.imageshack.com/v2/320xq70/r/922/uOeZAn.jpg" width="200">
+    </div>
+    <button class="adminBtn" onclick="location.href='https://direct.lc.chat/19188360/'">Hubungi Admin</button>
+    <button class="doneBtn" onclick="location.href='../'">Saya Telah Membayar</button>
+    <details>
+      <summary>PANDUAN PEMBAYARAN</summary>
+      <ol>
+        <li>Buka aplikasi mobile banking atau e-money</li>
+        <li>Klik logo/tombol/menu "Bayar (Pay)" atau "Pindai (Scan)"</li>
+        <li>Scan QR Code, Isi Nominal</li>
+        <li>Klik tombol "Pay" atau "Bayar"</li>
+      </ol>
+    </details>
+  </div>
+
+  <script>
+    let selected = "";
+    let nominal = 0;
+
+    function selectMenu(type) {
+      selected = type;
+      document.getElementById("infoDana").style.display = (type === "dana") ? "block" : "none";
+    }
+
+    function addAmount(amount) {
+      nominal += amount;
+      document.getElementById("nominal").value = nominal.toLocaleString("id-ID");
+    }
+
+    function submitForm() {
+      let raw = document.getElementById("nominal").value.replace(/\D/g, "");
+      nominal = parseInt(raw);
+      if (isNaN(nominal) || nominal < 50000) {
+        alert("Minimal deposit 50.000");
+        return;
+      }
+      if (selected === "dana") {
+        alert("Deposit Berhasil Dikirim");
+        location.href = "../";
+        return;
+      }
+      document.getElementById("formSection").classList.add("hidden");
+      const loading = document.createElement("p");
+      loading.innerText = "Loading...";
+      document.body.appendChild(loading);
+      setTimeout(() => {
+        loading.remove();
+        document.getElementById("invoice").style.display = "block";
+        const now = new Date();
+        const expire = new Date(now.getTime() + 600000);
+        document.getElementById("invId").innerText = Date.now();
+        document.getElementById("invDate").innerText = now.toLocaleString("id-ID");
+        document.getElementById("invExp").innerText = expire.toLocaleString("id-ID");
+        document.getElementById("invTopup").innerText = nominal.toLocaleString("id-ID");
+        document.getElementById("invJumlah").innerText = nominal.toLocaleString("id-ID");
+        setTimeout(() => {
+          document.getElementById("invStatus").innerText = "EXPIRED";
+        }, 600000);
+      }, 2000);
+    }
+  </script>
+</body>
+</html>
