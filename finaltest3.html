@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta property="og:description" content="Pilih Menu Deposit Yang Diinginkan, Scan Qris, Isi Nominal, Transfer Dan Klik Telah Membayar. Deposit Wajib Menggunakan Kode Unik 818">
+  <title>Formulir Deposit</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: monospace;
+      background-color: #c79a00;
+      color: black;
+      text-align: center;
+    }
+    .header {
+      background: black;
+      color: white;
+      padding: 1rem;
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+    .marquee {
+      background: #c79a00;
+      padding: 0.5rem;
+      font-weight: bold;
+    }
+    .menu-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1rem;
+      margin: 1rem auto;
+    }
+    .menu-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 80px;
+      font-weight: bold;
+    }
+    .menu-item img {
+      width: 50px;
+      height: 50px;
+    }
+    .default-info {
+      margin: 1rem auto;
+      max-width: 300px;
+      background: #fff;
+      color: black;
+      font-weight: bold;
+      padding: 1rem;
+      border-radius: 10px;
+    }
+    .btn-admin {
+      background: #007bff;
+      color: white;
+      padding: 0.7rem 1.5rem;
+      border: none;
+      border-radius: 5px;
+      font-weight: bold;
+      margin-top: 1rem;
+      text-decoration: none;
+      display: inline-block;
+    }
+    @media (max-width: 600px) {
+      .menu-item {
+        width: 70px;
+      }
+      .menu-item img {
+        width: 40px;
+        height: 40px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="header">FORMULIR DEPOSIT</div>
+  <div class="marquee">
+    Pilih Menu Deposit Yang Diinginkan, Scan Qris, Isi Nominal, Transfer Dan Klik Telah Membayar. Deposit Wajib Menggunakan Kode Unik 818
+  </div>
+  <div class="menu-container">
+    <div class="menu-item" onclick="selectMethod('qrisbank')">
+      <img src="https://media.mediatelekomunikasisejahtera.com/template/alpha/mobile/assets/koinslots/img/logo/deposit/menu-icon-deposit.svg" alt="QRIS BANK">
+      QRIS BANK
+    </div>
+    <div class="menu-item" onclick="selectMethod('qrisinstan')">
+      <img src="https://media.mediatelekomunikasisejahtera.com/template/alpha/mobile/assets/koinslots/img/logo/deposit/menu-icon-qr.svg" alt="QRIS INSTAN">
+      QRIS INSTAN
+    </div>
+    <div class="menu-item" onclick="selectMethod('dana')">
+      <img src="https://media.mediatelekomunikasisejahtera.com/template/alpha/assets/img/bank%20virtual/dana.webp" alt="DANA">
+      DANA
+    </div>
+    <div class="menu-item" onclick="selectMethod('qrisewallet')">
+      <img src="https://media.mediatelekomunikasisejahtera.com/template/alpha/mobile/assets/koinslots/img/logo/deposit/menu-icon-wallet.svg" alt="QRIS EWALLET">
+      QRIS EWALLET
+    </div>
+  </div>
+  <div class="default-info" id="defaultInfo">
+    Klik 1 Dari 4 Method Diatas, Masukan Nominal, Dan Tunggu Invoice Untuk QRIS,<br>
+    Deposit Qris 3 Detik Masuk!!!
+  </div>
+  <a class="btn-admin" href="https://direct.lc.chat/19188360/" target="_blank">Hubungi Admin</a>
+
+  <div id="formContainer"></div>
+
+  <script>
+    function selectMethod(method) {
+      document.getElementById('defaultInfo').style.display = 'none';
+      // load the correct form content based on selection
+      fetch(`./form-${method}.html`)
+        .then(res => res.text())
+        .then(html => {
+          document.getElementById('formContainer').innerHTML = html;
+          window.scrollTo({ top: document.getElementById('formContainer').offsetTop, behavior: 'smooth' });
+        });
+    }
+  </script>
+</body>
+</html>
