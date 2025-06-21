@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta property="og:description" content="Pilih Menu Deposit Yang Diinginkan, Scan Qris, Isi Nominal, Transfer Dan Klik Telah Membayar. Deposit Wajib Menggunakan Kode Unik 818">
+  <title>Formulir Deposit</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: monospace;
+      background-color: #d4a017;
+      color: black;
+      text-align: center;
+    }
+    header {
+      background: #000;
+      color: #fff;
+      padding: 10px;
+      font-size: 24px;
+      font-weight: bold;
+    }
+    .marquee {
+      background-color: #d4a017;
+      color: black;
+      font-weight: bold;
+      font-family: monospace;
+      padding: 8px;
+      overflow: hidden;
+      white-space: nowrap;
+      box-sizing: border-box;
+      animation: scroll-left 15s linear infinite;
+    }
+    @keyframes scroll-left {
+      0% { transform: translateX(100%); }
+      100% { transform: translateX(-100%); }
+    }
+    .menu-container {
+      display: flex;
+      justify-content: space-around;
+      flex-wrap: wrap;
+      background: #333;
+      padding: 10px;
+    }
+    .menu-item {
+      flex: 1 1 40%;
+      margin: 10px;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .menu-item img {
+      width: 50px;
+      height: 50px;
+    }
+    #content {
+      margin-top: 20px;
+      padding: 10px;
+    }
+    .info {
+      font-weight: bold;
+      font-size: 16px;
+      margin-top: 30px;
+      padding: 0 10px;
+    }
+    button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      background: #007bff;
+      color: white;
+      border: none;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+    .invoice {
+      background: white;
+      margin: 20px auto;
+      padding: 20px;
+      max-width: 400px;
+      border-radius: 10px;
+    }
+    .qris-img {
+      width: 100%;
+      max-width: 300px;
+    }
+  </style>
+</head>
+<body>
+  <header>FORMULIR DEPOSIT</header>
+  <div class="marquee">Pilih Menu Deposit Yang Diinginkan, Scan Qris, Isi Nominal, Transfer Dan Klik Telah Membayar. Deposit Wajib Menggunakan Kode Unik 818</div>
+  <div class="menu-container">
+    <div class="menu-item" onclick="showMenu('qrisbank')">
+      <img src="https://media.mediatelekomunikasisejahtera.com/template/alpha/mobile/assets/koinslots/img/logo/deposit/menu-icon-deposit.svg" alt="QRIS BANK" />
+      <div>QRIS BANK</div>
+    </div>
+    <div class="menu-item" onclick="showMenu('qrisinstan')">
+      <img src="https://media.mediatelekomunikasisejahtera.com/template/alpha/mobile/assets/koinslots/img/logo/deposit/menu-icon-qr.svg" alt="QRIS INSTAN" />
+      <div>QRIS INSTAN</div>
+    </div>
+    <div class="menu-item" onclick="showMenu('dana')">
+      <img src="https://media.mediatelekomunikasisejahtera.com/template/alpha/assets/img/bank%20virtual/dana.webp" alt="DANA" />
+      <div>DANA</div>
+    </div>
+    <div class="menu-item" onclick="showMenu('qrisewallet')">
+      <img src="https://media.mediatelekomunikasisejahtera.com/template/alpha/mobile/assets/koinslots/img/logo/deposit/menu-icon-wallet.svg" alt="QRIS EWALLET" />
+      <div>QRIS EWALLET</div>
+    </div>
+  </div>
+
+  <div id="content">
+    <div id="defaultText" class="info">
+      Klik 1 Dari 4 Method Diatas, Masukan Nominal, Dan Tunggu Invoice Untuk QRIS,<br />
+      Deposit Qris 3 Detik Masuk!!!
+    </div>
+  </div>
+
+  <button onclick="window.location.href='https://direct.lc.chat/19188360/'">Hubungi Admin</button>
+
+  <script>
+    function showMenu(menu) {
+      document.getElementById("defaultText").style.display = "none";
+      const content = document.getElementById("content");
+      if (menu === 'dana') {
+        content.innerHTML = `
+          <div style="border: 2px solid #000; padding: 10px; margin-bottom: 10px; font-weight: bold;">DANA - 088214538915 - SURWATI</div>
+          <input type="text" id="nominal" placeholder="Masukkan Jumlah Deposit" /><br><br>
+          <button onclick="submitDana()">KIRIM</button>
+        `;
+      } else {
+        content.innerHTML = `
+          <input type="text" id="nominal" placeholder="Masukkan Jumlah Deposit" /><br><br>
+          <button onclick="submitQRIS()">KIRIM</button>
+        `;
+      }
+    }
+
+    function submitDana() {
+      const nominal = document.getElementById("nominal").value;
+      if (!nominal) return alert("Nominal harus diisi");
+      alert("Deposit Berhasil Dikirim");
+      window.location.href = "../";
+    }
+
+    function submitQRIS() {
+      const nominal = document.getElementById("nominal").value;
+      if (!nominal) return alert("Nominal harus diisi");
+      document.getElementById("content").innerHTML = "<p>Loading...</p>";
+      setTimeout(() => {
+        showInvoice(nominal);
+      }, 3000);
+    }
+
+    function showInvoice(amount) {
+      const now = new Date();
+      const invoiceID = 'INV-' + Math.floor(Math.random() * 1000000);
+      const expireTime = new Date(now.getTime() + 10 * 60000);
+      document.getElementById("content").innerHTML = `
+        <div class="invoice">
+          <h2>Invoice</h2>
+          <p>No Invoice: ${invoiceID}</p>
+          <p>Tgl: ${now.toLocaleString()}</p>
+          <p>Batas Pembayaran: ${expireTime.toLocaleString()}</p>
+          <p>Status: <span id="status">UNPAID</span></p>
+          <p>Keterangan: TopUp ${amount}</p>
+          <p>Jumlah: IDR ${amount}</p>
+          <p>Biaya Layanan: IDR 0,00</p>
+          <p>Total Bayar: IDR ${amount}</p>
+          <p>Pilihan Pembayaran:</p>
+          <img src="https://gtyfup2m.112400c1199c.com/logo-qris.png" width="100" /><br><br>
+          <strong>Pindai Qris Di Bawah Untuk membayar</strong><br>
+          <img class="qris-img" src="https://imagizer.imageshack.com/v2/320xq70/r/922/uOeZAn.jpg" /><br><br>
+          <button onclick="window.location.href='https://direct.lc.chat/19188360/'">Hubungi Admin</button>
+          <button onclick="window.location.href='../'">Saya Sudah Membayar</button>
+        </div>
+      `;
+      setTimeout(() => {
+        document.getElementById("status").innerText = "EXPIRED";
+      }, 600000);
+    }
+  </script>
+</body>
+</html>
