@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta property="og:description" content="Pilih Menu Deposit Yang Diinginkan, Scan Qris, Isi Nominal, Transfer Dan Klik Telah Membayar. Deposit Wajib Menggunakan Kode Unik 818">
+  <title>Formulir Deposit</title>
+  <style>
+    body {
+      background-color: #d4a017;
+      font-family: 'Courier New', monospace;
+      color: #000;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+    }
+    header {
+      background-color: #000;
+      color: #fff;
+      padding: 10px;
+    }
+    h1.logo {
+      font-size: 24px;
+      margin: 0;
+    }
+    .marquee {
+      font-weight: bold;
+      background: #d4a017;
+      padding: 10px;
+      font-size: 14px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .menu-container {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin: 10px 0;
+    }
+    .menu {
+      margin: 10px;
+      text-align: center;
+      cursor: pointer;
+    }
+    .menu img {
+      width: 50px;
+      height: 50px;
+    }
+    .hidden {
+      display: none;
+    }
+    .form-section {
+      margin: 20px auto;
+      max-width: 400px;
+    }
+    input[type="number"] {
+      width: 100%;
+      padding: 10px;
+      font-size: 18px;
+      margin-bottom: 10px;
+      text-align: center;
+    }
+    .nominal-buttons {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    .nominal-buttons button {
+      padding: 10px;
+      font-size: 16px;
+    }
+    .info-text {
+      margin-top: 20px;
+      font-weight: bold;
+      font-size: 16px;
+    }
+    .admin-button, .submit-button {
+      padding: 10px 20px;
+      margin: 10px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .dana-info {
+      border: 2px solid black;
+      padding: 10px;
+      margin-bottom: 10px;
+    }
+    .invoice-page {
+      display: none;
+    }
+    .invoice-page.active {
+      display: block;
+    }
+    .qr-img {
+      max-width: 250px;
+      margin: 10px auto;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1 class="logo">FORMULIR DEPOSIT</h1>
+  </header>
+  <div class="marquee">Pilih Menu Deposit Yang Diinginkan, Scan Qris, Isi Nominal, Transfer Dan Klik Telah Membayar. Deposit Wajib Menggunakan Kode Unik 818</div>
+
+  <div class="menu-container">
+    <div class="menu" onclick="selectMethod('qris_bank')">
+      <img src="https://media.mediatelekomunikasisejahtera.com/template/alpha/mobile/assets/koinslots/img/logo/deposit/menu-icon-deposit.svg" />
+      <div>QRIS BANK</div>
+    </div>
+    <div class="menu" onclick="selectMethod('qris_instan')">
+      <img src="https://media.mediatelekomunikasisejahtera.com/template/alpha/mobile/assets/koinslots/img/logo/deposit/menu-icon-qr.svg" />
+      <div>QRIS INSTAN</div>
+    </div>
+    <div class="menu" onclick="selectMethod('dana')">
+      <img src="https://media.mediatelekomunikasisejahtera.com/template/alpha/assets/img/bank%20virtual/dana.webp" />
+      <div>DANA</div>
+    </div>
+    <div class="menu" onclick="selectMethod('qris_ewallet')">
+      <img src="https://media.mediatelekomunikasisejahtera.com/template/alpha/mobile/assets/koinslots/img/logo/deposit/menu-icon-wallet.svg" />
+      <div>QRIS EWALLET</div>
+    </div>
+  </div>
+
+  <div id="default-info" class="info-text">Klik 1 Dari 4 Method Diatas, Masukan Nominal, Dan Tunggu Invoice Untuk QRIS,<br>Deposit Qris 3 Detik Masuk!!!</div>
+
+  <div class="form-section hidden" id="form-section">
+    <div class="dana-info hidden" id="dana-info">DANA - 088214538915 - SURWATI</div>
+    <input type="number" id="nominal" placeholder="Masukan Jumlah Deposit" min="50000" />
+    <div class="nominal-buttons">
+      <button onclick="setNominal(50000)">50K</button>
+      <button onclick="setNominal(100000)">100K</button>
+      <button onclick="setNominal(200000)">200K</button>
+      <button onclick="setNominal(500000)">500K</button>
+      <button onclick="setNominal(750000)">750K</button>
+      <button onclick="setNominal(1000000)">1.000K</button>
+      <button onclick="setNominal(1250000)">1.250K</button>
+      <button onclick="setNominal(1500000)">1.500K</button>
+      <button onclick="setNominal(2000000)">2.000K</button>
+      <button onclick="resetNominal()" style="background:red;color:white;">X</button>
+    </div>
+    <button class="submit-button" onclick="kirimDeposit()">KIRIM</button>
+  </div>
+
+  <button class="admin-button" onclick="window.open('https://direct.lc.chat/19188360/', '_blank')">Hubungi Admin</button>
+
+  <div class="invoice-page" id="invoice">
+    <h2>Invoice</h2>
+    <p id="inv-id"></p>
+    <p id="inv-date"></p>
+    <p id="inv-exp"></p>
+    <p id="inv-status">UNPAID</p>
+    <p id="inv-ket"></p>
+    <p id="inv-total"></p>
+    <p>Pindai QRIS Di Bawah Untuk membayar</p>
+    <img class="qr-img" src="https://imagizer.imageshack.com/v2/320xq70/r/922/uOeZAn.jpg" />
+    <br>
+    <button onclick="window.open('https://direct.lc.chat/19188360/', '_blank')">Hubungi Admin</button>
+    <button onclick="window.location.href='../'">Saya Sudah Membayar</button>
+  </div>
+
+  <script>
+    let selectedMethod = '';
+
+    function selectMethod(method) {
+      selectedMethod = method;
+      document.getElementById('default-info').style.display = 'none';
+      document.getElementById('form-section').classList.remove('hidden');
+      document.getElementById('dana-info').classList.toggle('hidden', method !== 'dana');
+    }
+
+    function setNominal(val) {
+      document.getElementById('nominal').value = val.toLocaleString('id-ID');
+    }
+
+    function resetNominal() {
+      document.getElementById('nominal').value = '';
+    }
+
+    function kirimDeposit() {
+      const nominalInput = document.getElementById('nominal').value.replace(/\D/g, '');
+      if (!nominalInput || parseInt(nominalInput) < 50000) {
+        alert('Minimal deposit 50.000');
+        return;
+      }
+      if (selectedMethod === 'dana') {
+        alert('Deposit Berhasil Dikirim');
+        window.location.href = '../';
+        return;
+      }
+      document.getElementById('form-section').innerHTML = '<h3>Loading...</h3>';
+      setTimeout(() => {
+        document.querySelector('.invoice-page').classList.add('active');
+        document.getElementById('inv-id').innerText = 'NO. INVOICE: ' + Date.now().toString(36);
+        const now = new Date();
+        document.getElementById('inv-date').innerText = 'TGL: ' + now.toLocaleString();
+        const expiry = new Date(now.getTime() + 10 * 60000);
+        document.getElementById('inv-exp').innerText = 'BATAS PEMBAYARAN: ' + expiry.toLocaleString();
+        document.getElementById('inv-ket').innerText = 'KETERANGAN: TopUp ' + nominalInput;
+        document.getElementById('inv-total').innerText = 'TOTAL BAYAR: IDR ' + parseInt(nominalInput).toLocaleString('id-ID');
+
+        // Expired Countdown
+        setTimeout(() => {
+          document.getElementById('inv-status').innerText = 'EXPIRED';
+        }, 10 * 60 * 1000);
+      }, 3000);
+    }
+  </script>
+</body>
+</html>
