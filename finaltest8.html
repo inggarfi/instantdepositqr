@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Formulir Deposit</title>
+  <style>
+    body {
+      background-color: #d09d00;
+      font-family: monospace;
+      margin: 0;
+      padding: 0;
+      color: #000;
+    }
+    header {
+      background-color: #000;
+      color: #fff;
+      text-align: center;
+      padding: 10px;
+      font-size: 24px;
+      font-weight: bold;
+    }
+    .running-text {
+      background: #ffcc00;
+      padding: 6px;
+      overflow: hidden;
+      white-space: nowrap;
+      box-sizing: border-box;
+    }
+    .running-text span {
+      display: inline-block;
+      padding-left: 100%;
+      animation: marquee 15s linear infinite;
+    }
+    @keyframes marquee {
+      0% { transform: translate(0, 0); }
+      100% { transform: translate(-100%, 0); }
+    }
+    .menu-container {
+      display: flex;
+      justify-content: space-around;
+      flex-wrap: wrap;
+      background-color: #444;
+      padding: 10px 0;
+    }
+    .menu-item {
+      width: 25%;
+      text-align: center;
+      color: white;
+      margin-bottom: 10px;
+    }
+    .menu-item img {
+      width: 50px;
+      height: 50px;
+    }
+    .menu-item span {
+      display: block;
+      margin-top: 6px;
+    }
+    .info-box {
+      background-color: white;
+      color: black;
+      border: 3px solid black;
+      font-weight: bold;
+      padding: 6px;
+      margin: 12px;
+      text-align: center;
+    }
+    .input-container {
+      text-align: center;
+    }
+    .input-container input {
+      font-size: 24px;
+      text-align: center;
+      width: 80%;
+      padding: 8px;
+      border-radius: 6px;
+    }
+    .nominal-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 10px;
+    }
+    .nominal-buttons button {
+      background-color: #03a9f4;
+      color: white;
+      font-size: 16px;
+      padding: 10px;
+      margin: 5px;
+      border: none;
+      border-radius: 6px;
+      width: 22%;
+    }
+    #sendBtn {
+      background-color: #007bff;
+      color: white;
+      font-weight: bold;
+      padding: 10px;
+      border: none;
+      border-radius: 6px;
+      margin: 15px auto;
+      display: block;
+      width: 60%;
+      font-size: 18px;
+    }
+    .contact-admin {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .contact-admin a {
+      background-color: #007bff;
+      color: white;
+      text-decoration: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      display: inline-block;
+    }
+  </style>
+</head>
+<body>
+  <header>FORMULIR DEPOSIT</header>
+  <div class="running-text">
+    <span>Pilih Menu Deposit Yang Diinginkan, Scan Qris, Isi Nominal, Transfer Dan Klik Telah Membayar. Deposit Wajib Menggunakan Kode Unik 818</span>
+  </div>
+
+  <div class="menu-container">
+    <div class="menu-item" onclick="selectMethod('bank')">
+      <img src="https://cdn-icons-png.flaticon.com/512/483/483361.png" alt="QRIS BANK">
+      <span>QRIS BANK</span>
+    </div>
+    <div class="menu-item" onclick="selectMethod('instan')">
+      <img src="https://cdn-icons-png.flaticon.com/512/8839/8839430.png" alt="QRIS INSTAN">
+      <span>QRIS INSTAN</span>
+    </div>
+    <div class="menu-item" onclick="selectMethod('dana')">
+      <img src="https://cdn-icons-png.flaticon.com/512/349/349221.png" alt="DANA">
+      <span>DANA</span>
+    </div>
+    <div class="menu-item" onclick="selectMethod('ewallet')">
+      <img src="https://cdn-icons-png.flaticon.com/512/6195/6195700.png" alt="QRIS EWALLET">
+      <span>QRIS EWALLET</span>
+    </div>
+  </div>
+
+  <div id="infoDana" class="info-box" style="display:none;">DANA - 088214538915 - SURWATI</div>
+
+  <div class="input-container">
+    <p>Jumlah Deposit</p>
+    <input type="text" id="amount" placeholder="Masukan Jumlah" oninput="formatNominal(this)" />
+
+    <div class="nominal-buttons">
+      <button onclick="addNominal(50000)">50K</button>
+      <button onclick="addNominal(100000)">100K</button>
+      <button onclick="addNominal(200000)">200K</button>
+      <button onclick="addNominal(500000)">500K</button>
+      <button onclick="addNominal(750000)">750K</button>
+      <button onclick="addNominal(1000000)">1.000K</button>
+      <button onclick="addNominal(1250000)">1.250K</button>
+      <button onclick="addNominal(1500000)">1.500K</button>
+      <button onclick="addNominal(2000000)">2.000K</button>
+    </div>
+
+    <button id="sendBtn" onclick="submitForm()">KIRIM</button>
+  </div>
+
+  <div class="contact-admin">
+    <a href="https://direct.lc.chat/19188360/" target="_blank">Hubungi Admin</a>
+  </div>
+
+  <script>
+    let selectedMethod = '';
+
+    function selectMethod(method) {
+      selectedMethod = method;
+      document.getElementById('infoDana').style.display = method === 'dana' ? 'block' : 'none';
+    }
+
+    function addNominal(amount) {
+      let input = document.getElementById('amount');
+      let current = parseInt(input.value.replace(/\D/g, '')) || 0;
+      let total = current + amount;
+      input.value = formatNumber(total);
+    }
+
+    function formatNominal(el) {
+      let val = el.value.replace(/\D/g, '');
+      if (parseInt(val) < 50000) val = '50000';
+      el.value = formatNumber(parseInt(val));
+    }
+
+    function formatNumber(num) {
+      return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    }
+
+    function submitForm() {
+      const amount = document.getElementById('amount').value.replace(/\D/g, '');
+      if (!amount || parseInt(amount) < 50000) {
+        alert("Minimal deposit Rp 50.000");
+        return;
+      }
+      if (selectedMethod === 'dana') {
+        alert("Deposit Berhasil Dikirim");
+        window.location.href = '../';
+      } else {
+        // FAKE LOADING DAN INVOICE
+        alert("Loading...\nTunggu sebentar");
+        // Real invoice rendering would happen here
+      }
+    }
+  </script>
+</body>
+</html>
